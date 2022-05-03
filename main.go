@@ -1,7 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
-import "runtime"
+import (
+	"runtime"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	router := gin.Default()
