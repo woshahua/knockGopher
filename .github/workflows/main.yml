@@ -2,7 +2,6 @@ on:
   pull_request_review:
     types: [submitted]
     branches: ['main','dev']
-    paths: [' **path/**']
 
 jobs:
   build:
