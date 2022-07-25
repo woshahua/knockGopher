@@ -5,10 +5,10 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: job name
+      - name: test approval
         if: github.event.review.state == 'approved'
         run: |
           echo "approved" ...
