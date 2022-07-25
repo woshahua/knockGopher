@@ -11,4 +11,4 @@ jobs:
       - name: test approval
         if: github.event.review.state == 'approved'
         run: |
-          echo "approved" ...
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
