@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -26,4 +27,8 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		panic(errors.Wrap(err, "cmd error"))
 	}
+}
+
+func test() {
+	fmt.Println("it's chaos")
 }
