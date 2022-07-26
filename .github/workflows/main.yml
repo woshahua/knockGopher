@@ -14,5 +14,9 @@ jobs:
           echo '4' ${{ github.head_ref }}
           echo '5' ${{ github.base_ref }}
 
-      - name: Branch name
-        run: ${{ steps.extract_branch.outputs.branch }}
+      - name: Pull Request URL
+        uses: kceb/pull-request-url-action@v2
+        id: pr-url
+
+      - name: pr info
+        run: echo "${{ steps.pr-url.outputs.url }}"
