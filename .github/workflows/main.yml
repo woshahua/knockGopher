@@ -37,3 +37,6 @@ jobs:
 
       - name: commit hash
         run: echo ${{ github.sha }}
+
+      - name: View PR author
+        run: echo "This PR is opened by ${{ github.event.pull_request.user.login }} ."
