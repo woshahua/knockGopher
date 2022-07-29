@@ -7,20 +7,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: test approval
+        if: github.event.review.state == 'approved'
+        run: |
+          echo "approved" ...
       - run: |
           echo '1' $GITHUB_REF
           echo '2' ${{ github.ref }}
           echo '3' ${{ github.ref_name }}
           echo '4' ${{ github.head_ref }}
           echo '5' ${{ github.base_ref }}
-
       - name: Pull Request URL
         uses: kceb/pull-request-url-action@v2
         id: pr-url
 
       - name: pr info
         run: echo "${{ steps.pr-url.outputs.url }}"
-
 
       - uses: actions/checkout@v1
       # Find the PR associated with this push, if there is one.
