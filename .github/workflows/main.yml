@@ -48,4 +48,4 @@ jobs:
         run: echo "This PR is opened by ${{ github.event.pull_request.labels[1].name }} ."
 
       - name: get milestone
-        run: echo "This PR is opened by ${{ github.event.pull_request.milestone.name }} ."
+        run: echo "This PR is opened by ${{ github.event.pull_request.milestone.title }} ."
