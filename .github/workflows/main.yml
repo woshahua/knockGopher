@@ -46,4 +46,4 @@ jobs:
 
 
       - name: get label
-        run: echo "This PR is opened by ${{ github.event.pull_request.labels }} ."
+        run: echo "This PR is opened by ${{ github.event.pull_request.labels[1] }} ."
