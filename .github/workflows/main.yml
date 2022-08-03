@@ -55,4 +55,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: trigger beta build on bitrise
-        run: echo ${{ get-pr-info.outputs.source_repo }}
+        run: echo ${{ needs.get-pr-info.outputs.source_repo }}
