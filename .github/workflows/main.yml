@@ -1,14 +1,49 @@
 on:
   pull_request_review:
     types: [submitted]
-    branches: ['main','dev']
+    branches: ['develop']
+
+env:
+  PR_DEST: develop
+  PR_ID: 0
+  PR_SOURCE_REPO: ''
+  PR_MERGE_BRANCH: ''
+  PR_HEAD_BRANCH: ''
+  PR_AUTHOR: ''
+  PR_COMMIT_HASH: ''
 
 jobs:
-  build:
-    runs-on: self-hosted
+  check-pr-state:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: job name
-        if: github.event.review.state == 'approved'
+      - name: PR approval
+        if: github.event.review.state == 'approved' && github.event.pull_request.label[0].name == 'betaDeploy'
         run: |
-          echo "approved" ...
+          echo 'test'
+  get-pr-info:
+    needs: check-pr-state
+    runs-on: ubuntu-latest
+    steps:
+      - name: get commit hash
+        run: |
+          echo ${{ github.sha }} >> $PR_COMMIT_HASH
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+      - name: get PR id
+        run: echo ${{ steps.findPr.outputs.pr }} >> $PR_ID
+        if: success() && steps.findPr.outputs.number
+      - name: set PR merge branch
+        run: echo "pull/${PR_ID}/merge"
+      - name: set PR head branch
+        run: echo "pull/${PR_ID}/head"
+      - name: set PR source repo
+        run: echo "git@github.com:${PR_AUTHOR:}/freee-ios.git"
+  trigger-beta-build:
+    needs: get-pr-info
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger beta build on bitrise
+        run: |
+          echo 'build'
