@@ -22,11 +22,14 @@ jobs:
           echo 'test'
   get-pr-info:
     needs: check-pr-state
+    outputs:
+      commit_hash: ${{ steps.commit_hash.outputs.value }}
     runs-on: ubuntu-latest
     steps:
       - name: get commit hash
+        id: commit_hash
         run: |
-          echo ${{ github.sha }} >> ${{ env.PR_COMMIT_HASH }}
+          echo "::set-output name=value::${{ github.sha }}"
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
