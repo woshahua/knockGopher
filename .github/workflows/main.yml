@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: get commit hash
         run: |
-          echo ${{ github.sha }} >> ${env.PR_COMMIT_HASH}
+          echo ${{ github.sha }} >> ${{ env.PR_COMMIT_HASH }}
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
