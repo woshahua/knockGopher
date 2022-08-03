@@ -1,7 +1,7 @@
 on:
   pull_request_review:
     types: [submitted]
-    branches: ['develop']
+    branches: ['main', 'master', 'develop']
 
 env:
   PR_DEST: develop
