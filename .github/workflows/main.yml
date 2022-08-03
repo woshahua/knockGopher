@@ -18,7 +18,7 @@ jobs:
     if: github.event.review.state == 'approved'
     steps:
       - name: PR approval
-        run: echo ${{ github.event.pull_request.labels }}
+        run: echo $(printf '%s\n' "${{ github.event.pull_request.labels }}" | grep -qx "betaDeploy"; echo -n ${?} ) -eq 0 }}
         
   get-pr-info:
     needs: check-pr-state
