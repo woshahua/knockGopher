@@ -38,8 +38,7 @@ jobs:
       - name: get PR id 
         id: pr_id
         run: |
-          number=$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')
-          echo "::set-output name=value::${{ number }}"
+          echo "::set-output name=value::$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')"
         if: success() && steps.findPr.outputs.number
       - name: set PR merge branch
         id: merge_branch
