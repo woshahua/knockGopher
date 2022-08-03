@@ -18,7 +18,7 @@ jobs:
     if: github.event.review.state == 'approved'
     steps:
       - name: PR approval
-        run: echo ${{ github.event.pull_request.label[0].name }}
+        run: echo ${{ github.event.pull_request.labels }}
         
   get-pr-info:
     needs: check-pr-state
