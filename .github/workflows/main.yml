@@ -15,7 +15,7 @@ env:
 jobs:
   check-pr-state:
     runs-on: ubuntu-latest
-    if: ${{ github.event.review.state == 'approved' && contains(fromJson('["betaDeploy"]'), github.event.pull_request.labels) }} 
+    if: ${{ github.event.review.state == 'approved' && contains(github.event.issue.labels.*.name, 'betaDeploy') }} 
     steps:
       - name: PR approval
         run: echo 'starting ...'
