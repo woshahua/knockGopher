@@ -18,8 +18,8 @@ jobs:
     steps:
       - name: PR approval
         if: github.event.review.state == 'approved' && github.event.pull_request.label[0].name == 'betaDeploy'
-        run: |
-          echo 'test'
+        run: echo 'starting ...'
+        
   get-pr-info:
     needs: check-pr-state
     outputs:
@@ -27,34 +27,32 @@ jobs:
       merge_branch: ${{ steps.merge_branch.outputs.value }}
       head_branch: ${{ steps.head_branch.outputs.value }}
       pr_id: ${{ steps.pr_id.outputs.value }}
+      pr_author: $${{ steps.pr_author.outputs.value }}
       source_repo: ${{ steps.source_repo.outputs.value }}
-      
     runs-on: ubuntu-latest
     steps:
       - name: get commit hash
         id: commit_hash
-        run: |
-          echo "::set-output name=value::${{ github.sha }}"
+        run: echo "::set-output name=value::${{ github.sha }}"
       - name: get pr id 
         id: pr_id
-        run: |
-          echo "::set-output name=value::$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')"
+        run: echo "::set-output name=value::$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')"
       - name: set PR merge branch
         id: merge_branch
-        run: | 
-          echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/merge"
+        run: echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/merge"
       - name: set PR head branch
         id: head_branch
-        run: | 
-          echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/head"
+        run: echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/head"
+      - name: get pr author
+        id: pr_author
+        run: echo "::set-output name=value::${{ github.event.pull_request.user.login }}"
       - name: set PR source repo
         id: source_repo
-        run: |
-          echo "::set-output name=value::git@github.com:woshahua/freee-ios.git"
+        run: echo "::set-output name=value::git@github.com:${{ steps.pr_author.outputs.value }}/freee-ios.git"
+          
   trigger-beta-build:
     needs: get-pr-info
     runs-on: ubuntu-latest
     steps:
       - name: trigger beta build on bitrise
-        run: |
-          echo 'build'
+        run: echo ${{ get-pr-info.outputs.source_repo }}
