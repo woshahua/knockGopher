@@ -15,10 +15,10 @@ env:
 jobs:
   check-pr-state:
     runs-on: ubuntu-latest
-    if: github.pull_request.review.state == 'approved' && github.event.pull_request.label[0].name == 'betaDeploy'
+    # if: github.pull_request.state == 'approved' && github.event.pull_request.label[0].name == 'betaDeploy'
     steps:
       - name: PR approval
-        run: echo 'starting ...'
+        run: echo ${{ github.event.review.state }}
         
   get-pr-info:
     needs: check-pr-state
