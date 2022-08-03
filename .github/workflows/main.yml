@@ -50,5 +50,8 @@ jobs:
         id: source_repo
         run: echo "::set-output name=value::git@github.com:${{ steps.pr_author.outputs.value }}/freee-ios.git"
       - name: branch name
-        run: echo ${{ github.head_ref }}
+        run: |
+          echo ${{ github.head_ref }}
+          echo ${{ github.event.pull_request.head.ref}}
+          
         
