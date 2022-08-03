@@ -49,10 +49,6 @@ jobs:
       - name: set PR source repo
         id: source_repo
         run: echo "::set-output name=value::git@github.com:${{ steps.pr_author.outputs.value }}/freee-ios.git"
-          
-  trigger-beta-build:
-    needs: get-pr-info
-    runs-on: ubuntu-latest
-    steps:
-      - name: trigger beta build on bitrise
-        run: echo ${{ needs.get-pr-info.outputs.source_repo }}
+      - name: branch name
+        run: echo ${{ github.head_ref }}
+        
