@@ -35,13 +35,11 @@ jobs:
         id: commit_hash
         run: |
           echo "::set-output name=value::${{ github.sha }}"
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          state: open
       - name: get PR id 
+        id: pr_id
         run: |
-          echo "::set-output name=value::${{ steps.findPr.outputs.pr }}"
+          number=$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')
+          echo "::set-output name=value::${{ number }}"
         if: success() && steps.findPr.outputs.number
       - name: set PR merge branch
         id: merge_branch
