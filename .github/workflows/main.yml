@@ -46,11 +46,11 @@ jobs:
       - name: set PR merge branch
         id: merge_branch
         run: | 
-          echo "::set-output name=value::pull/${{ outputs.pr_id.value }}/merge"
+          echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/merge"
       - name: set PR head branch
         id: head_branch
         run: | 
-          echo "::set-output name=value::pull/${{ outputs.pr_id.value }}/head"
+          echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/head"
       - name: set PR source repo
         id: source_repo
         run: |
