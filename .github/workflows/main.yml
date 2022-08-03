@@ -24,6 +24,11 @@ jobs:
     needs: check-pr-state
     outputs:
       commit_hash: ${{ steps.commit_hash.outputs.value }}
+      merge_branch: ${{ steps.merge_branch.outputs.value }}
+      head_branch: ${{ steps.head_branch.outputs.value }}
+      pr_id: ${{ steps.pr_id.outputs.value }}
+      source_repo: ${{ steps.source_repo.outputs.value }}
+      
     runs-on: ubuntu-latest
     steps:
       - name: get commit hash
@@ -36,17 +41,20 @@ jobs:
           state: open
       - name: get PR id 
         run: |
-          echo ${{ steps.findPr.outputs.pr }} >> ${env.PR_ID}
+          echo "::set-output name=value::${{ steps.findPr.outputs.pr }}"
         if: success() && steps.findPr.outputs.number
       - name: set PR merge branch
+        id: merge_branch
         run: | 
-          echo "pull/${env.PR_ID}/merge"
+          echo "::set-output name=value::pull/${{ outputs.pr_id.value }}/merge"
       - name: set PR head branch
+        id: head_branch
         run: | 
-          echo "pull/${env.PR_ID}/head"
+          echo "::set-output name=value::pull/${{ outputs.pr_id.value }}/head"
       - name: set PR source repo
+        id: source_repo
         run: |
-          echo "git@github.com:${env.PR_AUTHOR}/freee-ios.git"
+          echo "::set-output name=value::git@github.com:woshahua/freee-ios.git"
   trigger-beta-build:
     needs: get-pr-info
     runs-on: ubuntu-latest
