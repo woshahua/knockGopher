@@ -19,6 +19,8 @@ jobs:
         
   get-pr-info:
     needs: check-pr-state
+    env:
+      WORKFLOW: test
     outputs:
       commit_hash: ${{ steps.commit_hash.outputs.value }}
       merge_branch: ${{ steps.merge_branch.outputs.value }}
@@ -50,5 +52,8 @@ jobs:
         run: |
           echo ${{ github.head_ref }}
           echo ${{ github.event.pull_request.head.ref}}
+      - name: test
+        run: |
+         echo $WORKFLOW
           
         
