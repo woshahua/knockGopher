@@ -1,8 +1,6 @@
 on:
-  pull_request_review:
-    types: [submitted]
-    branches: ['main', 'master', 'develop']
-
+  pull_request_review_comment:
+    types: [created]
 env:
   PR_DEST: develop
   PR_ID: 0
@@ -15,7 +13,6 @@ env:
 jobs:
   check-pr-state:
     runs-on: ubuntu-latest
-    if: ${{ github.event.review.state == 'approved' && contains(github.event.pull_request.labels.*.name, 'betaDeploy') }} 
     steps:
       - name: PR approval
         run: echo 'starting ...'
