@@ -55,6 +55,7 @@ jobs:
           echo ${{ github.event.pull_request.head.ref}}
       - name: test
         run: |
-         echo $WORKFLOW
+         echo "$WORKFLOW"
+         echo " ${{ env.WORKFLOW }}"
           
         
