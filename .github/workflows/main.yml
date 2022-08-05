@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: get commit hash
         id: commit_hash
-        run: echo "::set-output name=value::${{ github.sha }}"
+        run: echo "::set-output name=value::${{ github.event.pull_request.head.sha }}"
       - name: get pr id 
         id: pr_id
         run: echo "::set-output name=value::$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')"
