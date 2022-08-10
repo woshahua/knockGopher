@@ -57,5 +57,3 @@ jobs:
         run: |
          echo "$WORKFLOW"
          echo " ${{ env.WORKFLOW }}"
-          
-        
