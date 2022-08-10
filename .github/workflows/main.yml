@@ -1,53 +1,59 @@
 on:
   pull_request_review:
     types: [submitted]
-    branches: ['main','dev']
+    branches: ['main', 'master']
+env:
+  PR_DEST: develop
+  PR_ID: 0
+  PR_SOURCE_REPO: ''
+  PR_MERGE_BRANCH: ''
+  PR_HEAD_BRANCH: ''
+  PR_AUTHOR: ''
+  PR_COMMIT_HASH: ''
 
 jobs:
-  build:
+  check-pr-state:
     runs-on: ubuntu-latest
     steps:
-      - name: test approval
-        if: github.event.review.state == 'approved'
-        run: |
-          echo "approved" ...
-      - run: |
-          echo '1' $GITHUB_REF
-          echo '2' ${{ github.ref }}
-          echo '3' ${{ github.ref_name }}
-          echo '4' ${{ github.head_ref }}
-          echo '5' ${{ github.base_ref }}
-      - name: Pull Request URL
-        uses: kceb/pull-request-url-action@v2
-        id: pr-url
-
-      - name: pr info
-        run: echo "${{ steps.pr-url.outputs.url }}"
-
-      - uses: actions/checkout@v1
-      # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-
-      - name: commit hash
-        run: echo ${{ github.sha }}
-
-      - name: View PR author
-        run: echo "This PR is opened by ${{ github.event.pull_request.user.login }} ."
-
+      - name: PR approval
+        run: echo 'starting ...'
+        
+  get-pr-info:
+    needs: check-pr-state
+    env:
+      WORKFLOW: test
+    outputs:
+      commit_hash: ${{ steps.commit_hash.outputs.value }}
+      merge_branch: ${{ steps.merge_branch.outputs.value }}
+      head_branch: ${{ steps.head_branch.outputs.value }}
+      pr_id: ${{ steps.pr_id.outputs.value }}
+      pr_author: $${{ steps.pr_author.outputs.value }}
+      source_repo: ${{ steps.source_repo.outputs.value }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: get commit hash
+        id: commit_hash
+        run: echo "::set-output name=value::${{ github.event.pull_request.head.sha }}"
+      - name: get pr id 
+        id: pr_id
+        run: echo "::set-output name=value::$(echo $GITHUB_REF | sed -e 's/[^0-9]//g')"
+      - name: set PR merge branch
+        id: merge_branch
+        run: echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/merge"
+      - name: set PR head branch
+        id: head_branch
+        run: echo "::set-output name=value::pull/${{ steps.pr_id.outputs.value }}/head"
+      - name: get pr author
+        id: pr_author
+        run: echo "::set-output name=value::${{ github.event.pull_request.user.login }}"
+      - name: set PR source repo
+        id: source_repo
+        run: echo "::set-output name=value::git@github.com:${{ steps.pr_author.outputs.value }}/freee-ios.git"
       - name: branch name
-        run: echo "This PR is opened by ${{ github.event.pull_request.user.login }} ."
-
-      - name: get label
-        run: echo "This PR is opened by ${{ github.event.pull_request.labels[1].name }} ."
-
-      - name: get milestone
-        run: echo "This PR is opened by ${{ github.event.pull_request.milestone.title }} ."
+        run: |
+          echo ${{ github.head_ref }}
+          echo ${{ github.event.pull_request.head.ref}}
+      - name: test
+        run: |
+         echo "$WORKFLOW"
+         echo " ${{ env.WORKFLOW }}"
